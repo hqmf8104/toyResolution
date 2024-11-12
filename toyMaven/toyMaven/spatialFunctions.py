@@ -33,7 +33,7 @@ def F1(box, model, frame):
     pixelHeight, pixelWidth, _ = frame.shape
 
 
-    K = homographyMatrix(pixelWidth,pixelHeight,[0,0],[500,0],[0,300],[500,300])
+    K = homographyMatrix(pixelWidth,pixelHeight,[0,0],[500,0],[0,500],[500,500])
     actualCentre = pixelToRealCoord(((x1 + x2) // 2, (y1 + y2) // 2),K)  # Object center point in pixel coords
     actualCentre = ((x1 + x2) // 2, (y1 + y2)) 
     #****************************************************************************************************

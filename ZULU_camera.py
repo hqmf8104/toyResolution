@@ -24,7 +24,7 @@ model = YOLO('./yolov8models/yolov8s-visdrone.pt')  # Use a lightweight model fo
 
 # resolution calibration variables
 confidenceThreshold = 0.5 #varies between 0 and 1
-spatialThreshold = 150 # in transformed coordinates
+spatialThreshold = 250 # in transformed coordinates
 ageOff = 5 # in seconds
 
 # plot variables
@@ -34,8 +34,8 @@ iconSize = 0.05
 cap = cv2.VideoCapture(1)  # 0 is the default webcam
 
 # Initialize tracked objects and Matplotlib data
-tracked_objects = {} # [id]:[(x,y),TOI, description,identification(friend, enemy, unk), [file_loc]]
-aged_tracked_objects = {}
+trackedObjects = {} # [id]:[(x,y),TOI, description,identification(friend, enemy, unk), [file_loc]]
+agedTrackedObjects = {}
 object_count = 0  # Unique ID for each detected object
 objTOI = datetime.now()
 x_data, y_data = [], []
@@ -66,40 +66,33 @@ while cap.isOpened():
     for result in results:
         for box in result.boxes:
             
-            # Get data from model results
+            # GET NEW OBJECT
             center_x, center_y, label, confidence, x1, y1, x2, y2 = F1(box, model, frame)
-            #-------------------------------------------------------------------------------------------------------
+            obj_id = object_count
+            current_objects.append((obj_id, (center_x, center_y), label, confidence, (x1, y1, x2, y2)))
+            object_count += 1
 
-            #-------------------------------------------------------------------------------------------------------
-            'F2: TRACK / RESOLVE OBJECTS'
-            ' a. track objects'
-            ' b. store objects and recall'
-            ' if we are storing objects and recalling them for use here, then we can run a seperate process to enrich those objects with other data'
-
-            # Track objects based on proximity to previous frames and threshold
-            
-            # CONFIDENCE
-            if  confidence > confidenceThreshold:
-                object_found = False
-                for obj_id, prev_center in tracked_objects.items():
-                    prev_x, prev_y = prev_center[0]  # Last known position
-                    distance = ((center_x - prev_x) ** 2 + (center_y - prev_y) ** 2) ** 0.5
-                    
-                    # DISTANCE 
-                    if distance < spatialThreshold:  # Adjust threshold as needed
-                        tracked_objects[obj_id][0] = (center_x, center_y) #(x,y)
-                        tracked_objects[obj_id][1] = objTOI #TOI
-                        #tracked_objects[obj_id][2] = label #description,identification(friend, enemy, unk), [file_loc]]
-                        object_found = True
-                        current_objects.append((obj_id, (center_x, center_y), label, confidence, (x1, y1, x2, y2)))
-                        break
-
-                # NEW OBJECT
-                if not object_found:  # New object
-                    tracked_objects[object_count] = [(center_x, center_y),objTOI,label,None,[None]]
-                    current_objects.append((object_count, (center_x, center_y), label, confidence, (x1, y1, x2, y2)))
-                    object_count += 1
+            # RESOLVE NEW OBJECTS WITH KNOWN OBJECTS
+            newImObject = False
+            for obj_id, prev_center in trackedObjects.items():
                 
+                # EXISTING OBJECT DATA
+                prev_x, prev_y = prev_center[0]  # Last known position
+
+                # IMAGERY OBJECT RESOLUTION
+                distance = ((center_x - prev_x) ** 2 + (center_y - prev_y) ** 2) ** 0.5
+                if distance < spatialThreshold and confidence > confidenceThreshold:  # Adjust threshold as needed
+                    trackedObjects[obj_id][0] = (center_x, center_y) #(x,y)
+                    trackedObjects[obj_id][1] = objTOI #TOI
+                    trackedObjects[obj_id][2] += " " + label + " detected by camera 1 @ " + str(objTOI) #description,identification(friend, enemy, unk), [file_loc]]
+                    newImObject = True
+
+            # ADD NEW OBJECTS 
+            # IMAGERY OBJECT
+            if not newImObject and confidence > confidenceThreshold:
+                trackedObjects[obj_id] = [(center_x, center_y),objTOI,label,None,[None]]
+                        
+            # TEXT OBJECT RESOLUTION
 
             #-------------------------------------------------------------------------------------------------------
 
@@ -107,9 +100,8 @@ while cap.isOpened():
     # AGE OFF
     #-------------------------------------------------------------------------------------------------------
     current_time = datetime.now()
-    if len(tracked_objects) > 0:
-        [print(ii[1]) for key, ii in tracked_objects.items()]
-        aged_tracked_objects = {key: ent for key, ent in tracked_objects.items() if (current_time-ent[1]).total_seconds() <= ageOff}
+    #if len(trackedObjects) > 0:
+    agedTrackedObjects = {key: ent for key, ent in trackedObjects.items() if (current_time-ent[1]).total_seconds() <= ageOff}
 
     #-------------------------------------------------------------------------------------------------------
     # VIDEO PLOT
@@ -118,7 +110,7 @@ while cap.isOpened():
     for obj_id, center, label, confidence, bbox in current_objects:
         x1, y1, x2, y2 = bbox
         cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)  # Bounding box
-        cv2.putText(frame, f'{label} {confidence:.2f} ID: {obj_id}', (x1, y1 - 10),
+        cv2.putText(frame, f'{label} {confidence:.2f} ID: {obj_id} Len: {len(trackedObjects)}', (x1, y1 - 10),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
 
 
@@ -135,7 +127,7 @@ while cap.isOpened():
         artist.remove()
         
     # go through each object and plot
-    for ent in aged_tracked_objects.values():
+    for ent in agedTrackedObjects.values():
         if ent[3] == "en":
             iconImage = OffsetImage(enIcon, zoom=iconSize)
         else:
@@ -152,7 +144,7 @@ while cap.isOpened():
             pass
 
         # add new text
-        tracked_object_count = len(aged_tracked_objects)
+        tracked_object_count = len(agedTrackedObjects)
         plotText = ax.text(0.5, 0.9, f'No. of Tracked Objects: {tracked_object_count}', transform=ax.transAxes,
         fontsize=12, verticalalignment='top', horizontalalignment='center')
     plt.pause(0.01)  # Pause to update the plot
