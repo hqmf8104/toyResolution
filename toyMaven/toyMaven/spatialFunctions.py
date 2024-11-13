@@ -3,7 +3,7 @@ import numpy as np
 import cv2
 import tkinter
 
-def F1(box, model, frame):
+def F1(box, model, frame, spatialCoordinates = [[0,0],[0,0],[0,0],[0,0]]):
     """ 
     F1: GET DETECTED OBJECT DETAILS'
     Takes the results from a yolo model run over a single frame and the model itself and returns the x,y coords, label and confidence level
@@ -32,8 +32,8 @@ def F1(box, model, frame):
     # Get webcam data
     pixelHeight, pixelWidth, _ = frame.shape
 
-
-    K = homographyMatrix(pixelWidth,pixelHeight,[0,0],[500,0],[0,500],[500,500])
+    bl, br, tl, tr = spatialCoordinates
+    K = homographyMatrix(pixelWidth,pixelHeight,bl,br,tl,tr)
     actualCentre = pixelToRealCoord(((x1 + x2) // 2, (y1 + y2) // 2),K)  # Object center point in pixel coords
     actualCentre = ((x1 + x2) // 2, (y1 + y2)) 
     #****************************************************************************************************
