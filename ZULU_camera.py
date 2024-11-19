@@ -116,12 +116,14 @@ while cap.isOpened():
                 newTxObjects.remove(textEnt)
 
     # ADD NEW IMAGE OBJECTS 
-    for obj_id, center, label, confidence, bbox in newImObjects:
+    for obj_id, center, label, confidence, bbox in newTxObjects:
         if confidence > confidenceThreshold:
             trackedObjects[obj_id] = [(centreX, centreY),objTOI,label,None,[None]]
                             
     # ADD NEW TEXT OBJECTS
-        
+    for obj_id, center, label, confidence, bbox in newImObjects:
+        if confidence > confidenceThreshold:
+            trackedObjects[obj_id] = [(centreX, centreY),objTOI,label,None,[None]]
 
     #-------------------------------------------------------------------------------------------------------
     # AGE OFF TRACKED OBJECTS
@@ -180,6 +182,7 @@ while cap.isOpened():
         # add text to entities
         text_offset_x = 0.5  # Adjust the offset as needed
         text_offset_y = 0.5  # Adjust the offset as needed
+         
         scatterText = ax.text(ent[0][0] + text_offset_x, ent[0][1] + text_offset_y, annotationText, fontsize=12, color='black')
 
         # add text to plot
