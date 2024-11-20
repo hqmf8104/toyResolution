@@ -84,6 +84,12 @@ def resolutionFunction(queue):
             plotObjects = newObjects.copy()
             # PROCESS IMAGE BASED ENTITIES
             if source == "image":
+                # STANDARDISE IMAGE OBJECTS (NOTE THAT THIS STILL NEEDS TO BE IMPLEMENTED BELOW)
+                imObjects = {}
+                for obj_id, (centreX, centreY), label, confidence, bbox in newObjects:
+                    imObjects[obj_id] = [(centreX, centreY),objTOI,f"{source}: {label}","unk",[]]
+
+                # COMPARE TO TRACKED OBJECTS
                 for trackedObjId, imEntity in trackedObjects.items():
                     prevX, prevY = imEntity[0]  # position of current tracked entity 
 
@@ -97,8 +103,7 @@ def resolutionFunction(queue):
                             trackedObjects[trackedObjId][2] += f"{source}: {label}" #description,identification(friend, enemy, unk), [file_loc]]
                             newObjects.remove((obj_id, (centreX, centreY), label, confidence, bbox)) # remove item from list if resolved
 
-                
-                # ADD NEW OBJECTS
+                # ADD NEW IMAGE OBJECTS
                 for obj_id, (centreX, centreY), label, confidence, bbox in newObjects:
                     if confidence > confidenceThreshold:
                         trackedObjects[f"i{objCount}"] = [(centreX, centreY),objTOI,label,None,[None]]
@@ -117,6 +122,10 @@ def resolutionFunction(queue):
                 # Show webcam feed
                 cv2.imshow("Webcam Object Tracking", frame)
                 
+            # PROCESS CHAT BASED ENTITIES
+            if source == "chat":
+                #chat work goes here
+                pass
             #-------------------------------------------------------------------------------------------------------
             # AGE OFF TRACKED OBJECTS
             #-------------------------------------------------------------------------------------------------------
@@ -147,7 +156,6 @@ def resolutionFunction(queue):
             # go through each object and plot
             for ent in agedTrackedObjects.values():
 
-
                 # apply correct mil symbol (only enemy and unknown available)
                 if ent[3] == "en":
                     iconImage = OffsetImage(enIcon, zoom=iconSize)
@@ -177,6 +185,7 @@ def resolutionFunction(queue):
                 tracked_object_count = len(agedTrackedObjects)
                 plotText = ax.text(0.5, 0.9, f'No. of Tracked Objects: {tracked_object_count}', transform=ax.transAxes,
                 fontsize=12, verticalalignment='top', horizontalalignment='center')
+
             plt.pause(0.01)  # Pause to update the plot
             
         # Press 'q' to quit
