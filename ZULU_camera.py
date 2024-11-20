@@ -16,13 +16,15 @@ from collections import deque
 from toyMaven.spatialFunctions import F1
 from datetime import datetime, timedelta
 from matplotlib.offsetbox import OffsetImage, AnnotationBbox
+import logging
 
 """--------------------------------------------------------------------------------------------------------------
 # PART 0
 -----------------------------------------------------------------------------------------------------------------
 Sets initial parameters.
-
 """
+
+logging.getLogger('ultralytics').setLevel(logging.WARNING)
 # temp admin area
 textExample = [(50,50),datetime.now(),"3 x pers with AK47 showing hostile intent, mounted in white rangerover","en",None]
 newTxObjects = [textExample]
@@ -98,6 +100,7 @@ while cap.isOpened():
         for obj_id, center, label, confidence, bbox in newImObjects: # iterate over known list of entities
 
             imDistance = ((centreX - prevX) ** 2 + (centreY - prevY) ** 2) ** 0.5
+            
             if imDistance < spatialThreshold and confidence > confidenceThreshold:  
                 trackedObjects[trackedObjId][0] = (centreX, centreY) #(x,y)
                 trackedObjects[trackedObjId][1] = objTOI #TOI
@@ -114,11 +117,6 @@ while cap.isOpened():
                 trackedObjects[trackedObjId][1] = textEnt[1] #TOI
                 trackedObjects[trackedObjId][2] += f" @{textEnt[1]}: {textEnt[2]}"
                 newTxObjects.remove(textEnt)
-
-    # ADD NEW IMAGE OBJECTS 
-    for obj_id, center, label, confidence, bbox in newTxObjects:
-        if confidence > confidenceThreshold:
-            trackedObjects[obj_id] = [(centreX, centreY),objTOI,label,None,[None]]
                             
     # ADD NEW TEXT OBJECTS
     for obj_id, center, label, confidence, bbox in newImObjects:

@@ -3,7 +3,7 @@ import pickle
 import os
 from openai import OpenAI
 import json
-
+from dateutil import parser
 
 def fetch_chat_history(roomName: str, apiKey: str, serverAddress: str, port: int) -> dict:
     """
@@ -181,7 +181,8 @@ def chatToEntites():
 
         try:
             textEnt = json.loads(chatOut[8:-4])
-            textDict[f"{textNo}"] = [text_to_tuple(textEnt["loc"]),msg["delay_stamp"],textEnt["description"],textEnt["id"],[]]
+            textDict[f"{textNo}"] = [text_to_tuple(textEnt["loc"]),parser.isoparse(msg["delay_stamp"]),textEnt["description"],textEnt["id"],[]]
+
         except:
             pass
     return textDict
