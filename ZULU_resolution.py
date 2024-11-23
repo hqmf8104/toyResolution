@@ -1,8 +1,10 @@
 
 import cv2
-from datetime import datetime, timedelta
+from datetime import datetime, timezone
 from toyMaven.plottingFunctions import initialize_plot, update_plot
 from toyMaven.cameraFunctions import cameraObjects
+from toyMaven.chatFunctions import chatToEntites
+import time
 
 def resolutionFunction(queue, gXY):
     # resolution calibration variables
@@ -22,10 +24,11 @@ def resolutionFunction(queue, gXY):
     # Initialize tracked objects
     trackedEntities = {} # [id]:[(x,y),TOI, description,identification(friend, enemy, unk), [file_loc]]
     objCount = 0
-    objTOI = datetime.now()
+
     #----------------------------------------------------------------------------------------------------------------
     while True:
         if not queue.empty():
+            print("----------------------------------------------------------------------------------------------------------------------------")
             # Get queue
             source, newObjects, frame = queue.get()
             newEntities = {}
@@ -38,7 +41,7 @@ def resolutionFunction(queue, gXY):
                 # WEBCAM PLOT AND ENTITY STANDARDISATION
 
                 for obj_id, centre, label, confidence, bbox in newObjects:
-                    newEntities[obj_id] = [centre,datetime.now(),f"{source}: {label}","unk",confidence] # standardises image entites for later use
+                    newEntities[f"im_{obj_id}"] = [centre, datetime.now(timezone.utc),f"{source}: {label}","unk",confidence] # standardises image entites for later use
                     x1, y1, x2, y2 = bbox
                     cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)  # Bounding box
                     cv2.putText(frame, f'{label} {confidence:.2f} loc: {centre}', (x1, y1 - 10),
@@ -52,7 +55,8 @@ def resolutionFunction(queue, gXY):
             #-------------------------------------------------------------------------------------------------------
             if source == "chat":
                 #chat work goes here
-                pass
+                newEntities = newObjects
+                [print(f"Chat Object: {key} {ii}") for key, ii in newEntities.items()]
 
             #-------------------------------------------------------------------------------------------------------
             # RESOLVE ENTITIES
@@ -70,13 +74,29 @@ def resolutionFunction(queue, gXY):
                     if conf > confidenceThreshold and objDist < spatialThreshold:
                         print(f"Updating {trackedObjId}")
                         # if the new source is an image, overwrite the old object loc, otherwise leave it alone
-                        trackedEntities[trackedObjId][:2] = [xy,TOI]
+                        # prioritise more accurate reporting (images)
+                        if source == "image":
+                            trackedEntities[trackedObjId][0] = xy
+                        
+                        # update TOI with latest TOI
+                        trackedEntities[trackedObjId][1] = TOI
+
+                        # update description with latest description
                         newDesc = f"{source}: {entLabel}"
                         if trackedEntities[trackedObjId][2][:-len(newDesc)] != newDesc: # if the last description added is the same as the new one, do not add a new description
                             trackedEntities[trackedObjId][2] = f"{source}: {entLabel}"
-                        trackedEntities[trackedObjId][3:] = fofID, conf
+                        
+                        # only update identity if currently unk
+                        if trackedEntities[trackedObjId][3] == "unk": 
+                            trackedEntities[trackedObjId][3] = fofID
+
+                        # update confidence
+                        trackedEntities[trackedObjId][4] = conf
                         delIDList.append(obj_id)
+
+                # delete new entities used to update existing entities
                 for ii in delIDList:
+                    print(f"Deleting: {ii}")
                     del newEntities[ii]
             
             # add new objects
@@ -90,9 +110,9 @@ def resolutionFunction(queue, gXY):
             # AGE OFF TRACKED OBJECTS
             oldKeys = []
             for key, values in trackedEntities.items():
-                print(datetime.now())
+                print(datetime.now(timezone.utc))
                 print(values[1])
-                localAge = (datetime.now() - values[1]).total_seconds()
+                localAge = (datetime.now(timezone.utc) - values[1]).total_seconds()
                 print(f"age of {key}: {localAge}")
                 if localAge > ageOff:
                     oldKeys.append(key)
@@ -101,14 +121,15 @@ def resolutionFunction(queue, gXY):
             for key in oldKeys:
                 del trackedEntities[key]
 
-            print("Tracked Items")
-            [print(f"{key}: {ii}") for key, ii in trackedEntities.items()]
+            [print(f"Tracked Object: {key} {ii}") for key, ii in trackedEntities.items()]
+
             #-------------------------------------------------------------------------------------------------------
             # PLOT ENTITIES
             #-------------------------------------------------------------------------------------------------------
             # Update scatter plot with new points. Note it will error out if there are no objects detected without if statement
             update_plot(ax, trackedEntities, image_map, default_image_path)
-            
+
+                
         # Press 'q' to quit
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
@@ -126,9 +147,11 @@ if __name__ == "__main__":
 
     # Create and start the processes
     image_process = multiprocessing.Process(target=cameraObjects, args=(queue,visibleCorners,))
+    text_process = multiprocessing.Process(target=chatToEntites, args=(queue,))
     output_process = multiprocessing.Process(target=resolutionFunction, args=(queue,(groundX,groundY),))
 
     image_process.start()
+    text_process.start()
     output_process.start()
 
     # Optionally join processes (this example runs indefinitely)

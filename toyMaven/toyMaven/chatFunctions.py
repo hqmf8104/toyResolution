@@ -4,6 +4,8 @@ import os
 from openai import OpenAI
 import json
 from dateutil import parser
+import time
+import logging
 
 def fetch_chat_history(roomName: str, apiKey: str, serverAddress: str, port: int) -> dict:
     """
@@ -128,7 +130,7 @@ def call_chatgpt_api(apiKey: str, model: str, systemInstruction: str, userMessag
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
 
-def text_to_tuple(text: str, delimiter: str = ',') -> tuple:
+def text_to_tuple(text: str, defaultLoc: tuple = (250,250), delimiter: str = ',') -> tuple:
     """
     Converts a string of text into a tuple of exactly two floats.
 
@@ -145,13 +147,20 @@ def text_to_tuple(text: str, delimiter: str = ',') -> tuple:
         coord = text.split(delimiter)
         return tuple([float(coord[0][1:]),float(coord[1][:-1])])
     except:
-        return (0,0)
+        return defaultLoc
 
 #=================================================================================================
 # this function is not really a function, im just being lazy ref writing a proper sub process
-def chatToEntites():
+def chatToEntites(queue):
     # this is a shortcut just to demonstrate that we can fetch chat from the server and pass it as entities
 
+
+    # logging setup
+    logging.basicConfig(
+    filename='chat.log',         # Log file name
+    level=logging.DEBUG,        # Minimum level of messages to log
+    format='%(asctime)s - %(levelname)s - %(message)s'  # Log format
+    )          
     # OpenFire Setup
     roomName = "recce"
     apiKey = "10pPntvGIdLRkgOc"
@@ -161,29 +170,39 @@ def chatToEntites():
     # ChatGPT setup
     chatgptAPI = os.getenv("OPENAI_API_KEY")
     gptModel = "gpt-4o"
-    systemInstruction = "You return any message describing an entity as a text description (str), a location (str) and whether they are friendly or enemy (fr or en). If you don't know whether they are friend or enemy, assume friend. If the location refers to something green, you return (50,50) as the location. You always return either a json in the format {description: str, loc: str,id: en or fr} or null (if no entity has been described)."
+    systemInstruction = """
+                        You return any message describing an entity as a text description (str), a location (str) and whether they are friendly or enemy (fr or en).
+                        If you don't know whether they are friend or enemy, assume friend.
+                        If the location refers to something green, you return (50,50) as the location.
+                        If a locaton is given as (x,y), you return this value.
+                        Please return as a JSON of format {description: str, loc: str,id: en or fr} and wrap it in a code block.
+                        """
 
     # get chat history from chatroom
-    a1 = fetch_chat_history(roomName, apiKey, serverAddress, port)
-    result = a1["message"]
-    newChat, timeStamps = collect_new_messages(result)
+    while True:
+        a1 = fetch_chat_history(roomName, apiKey, serverAddress, port)
+        result = a1["message"]
+        newChat, timeStamps = collect_new_messages(result)
 
-    # initiate textEntity dictionary
-    textNo = 0
-    textDict = {}
+        # initiate textEntity dictionary
+        textNo = 0
+        textDict = {}
 
-    # process new messages
-    for msg in newChat:
-        textNo += 1
+        # process new messages
+        for msg in newChat:
+            textNo += 1
+            
+            # get chatGpt input
+            chatOut = call_chatgpt_api(chatgptAPI,gptModel,systemInstruction,msg["body"])
+            logging.info(chatOut)
+            try:
+                textEnt = json.loads(chatOut[8:-4])
+                #[id]:[(x,y),TOI, description,identification(friend, enemy, unk), confidence]
+                textDict[f"chat_{textNo}"] = [text_to_tuple(textEnt["loc"]),parser.isoparse(msg["delay_stamp"]),textEnt["description"],textEnt["id"],1]
+                
+                queue.put(("chat", textDict, None))
+            except:
+                pass
         
-        # get chatGpt input
-        chatOut = call_chatgpt_api(chatgptAPI,gptModel,systemInstruction,msg["body"])
-
-        try:
-            textEnt = json.loads(chatOut[8:-4])
-            textDict[f"{textNo}"] = [text_to_tuple(textEnt["loc"]),parser.isoparse(msg["delay_stamp"]),textEnt["description"],textEnt["id"],[]]
-
-        except:
-            pass
-    return textDict
+        time.sleep(10)
 #=================================================================================================
