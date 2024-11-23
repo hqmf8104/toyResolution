@@ -1,0 +1,9 @@
+Metadata-Version: 2.1
+Name: Toy-Maven
+Version: 0.1
+Summary: Package for storing everything required to run the toy maven demo
+Author: Paddy Mullany
+Author-email: patrick.a.m2020@gmail.com
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
