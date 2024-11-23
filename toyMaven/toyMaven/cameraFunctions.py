@@ -7,7 +7,7 @@ def cameraObjects(queue, visibleCorners, cameraChoice = 1):
 
     # Suppress logging for YOLOv8
     logging.getLogger('ultralytics').setLevel(logging.WARNING)
-    model = YOLO('./yolov8models/yolov8x-visdrone.pt')  # Use a lightweight model for real-time performance
+    model = YOLO('./yolov8models/yolov8s-visdrone.pt')  # Use a lightweight model for real-time performance
 
     # Initialize webcam
     cap = cv2.VideoCapture(cameraChoice)  # 0 is the default webcam

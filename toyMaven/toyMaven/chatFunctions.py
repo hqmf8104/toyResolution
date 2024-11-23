@@ -171,11 +171,12 @@ def chatToEntites(queue):
     chatgptAPI = os.getenv("OPENAI_API_KEY")
     gptModel = "gpt-4o"
     systemInstruction = """
-                        You return any message describing an entity as a text description (str), a location (str) and whether they are friendly or enemy (fr or en).
+                        You return any message describing an entity as a text description (str), a location (str) and whether they are friendly, enemy or destroyed (fr, en or dest).
                         If you don't know whether they are friend or enemy, assume friend.
                         If the location refers to something green, you return (50,50) as the location.
                         If a locaton is given as (x,y), you return this value.
-                        Please return as a JSON of format {description: str, loc: str,id: en or fr} and wrap it in a code block.
+                        ivo means near.
+                        Please return as a JSON of format {description: str, loc: str,id: en, fr or dest} and wrap it in a code block.
                         """
 
     # get chat history from chatroom

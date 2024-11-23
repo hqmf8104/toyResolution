@@ -18,6 +18,7 @@ def resolutionFunction(queue, gXY):
     # Map identifiers to image paths, with a default image for unknown types
     image_map = {
         "en": "./icons/en.png",
+        "dest": "./icons/dest.png",
     }
     default_image_path = "./icons/unk.png"  # Catch-all image
     
@@ -86,8 +87,10 @@ def resolutionFunction(queue, gXY):
                         if trackedEntities[trackedObjId][2][:-len(newDesc)] != newDesc: # if the last description added is the same as the new one, do not add a new description
                             trackedEntities[trackedObjId][2] = f"{source}: {entLabel}"
                         
-                        # only update identity if currently unk
-                        if trackedEntities[trackedObjId][3] == "unk": 
+                        # do not overwrite a known identiy (en or dest) with unk
+                        if trackedEntities[trackedObjId][3] != "unk" and fofID == "unk":
+                            pass
+                        else: 
                             trackedEntities[trackedObjId][3] = fofID
 
                         # update confidence
@@ -122,7 +125,9 @@ def resolutionFunction(queue, gXY):
                 del trackedEntities[key]
 
             [print(f"Tracked Object: {key} {ii}") for key, ii in trackedEntities.items()]
-
+            #if source == "chat":
+            #    time.sleep(5)
+                
             #-------------------------------------------------------------------------------------------------------
             # PLOT ENTITIES
             #-------------------------------------------------------------------------------------------------------
