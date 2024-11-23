@@ -7,15 +7,16 @@ from toyMaven.spatialFunctions import F1
 from datetime import datetime, timedelta
 from matplotlib.offsetbox import OffsetImage, AnnotationBbox
 import logging
+from toyMaven.plottingFunctions import getImage
 
-def cameraObjects(queue, visibleCorners):
+def cameraObjects(queue, visibleCorners, cameraChoice = 1):
 
     # Suppress logging for YOLOv8
     logging.getLogger('ultralytics').setLevel(logging.WARNING)
     model = YOLO('./yolov8models/yolov8x-visdrone.pt')  # Use a lightweight model for real-time performance
 
     # Initialize webcam
-    cap = cv2.VideoCapture(1)  # 0 is the default webcam
+    cap = cv2.VideoCapture(cameraChoice)  # 0 is the default webcam
 
     # Initialize tracked objects and Matplotlib data
     object_count = 0  # Unique ID for each detected object
@@ -51,10 +52,9 @@ def cameraObjects(queue, visibleCorners):
 
     cap.release()
     
-
 def resolutionFunction(queue):
     # resolution calibration variables
-    confidenceThreshold = 0.1 #varies between 0 and 1
+    confidenceThreshold = 0.5 #varies between 0 and 1
     spatialThreshold = 250 # in transformed coordinates
     ageOff = 60 # in seconds
 
@@ -72,80 +72,79 @@ def resolutionFunction(queue):
     ax.invert_yaxis()  # Invert y-axis to match OpenCV's coordinate system
 
     # Initialize tracked objects
-    trackedObjects = {} # [id]:[(x,y),TOI, description,identification(friend, enemy, unk), [file_loc]]
-    agedTrackedObjects = {}
+    trackedEntities = {} # [id]:[(x,y),TOI, description,identification(friend, enemy, unk), [file_loc]]
+    agedtrackedEntities = {}
     objCount = 0
     objTOI = datetime.now()
     #----------------------------------------------------------------------------------------------------------------
     while True:
         if not queue.empty():
-            # RESOLVE NEW OBJECTS WITH KNOWN OBJECTS
+            # Get queue
             source, newObjects, frame = queue.get()
-            plotObjects = newObjects.copy()
-            # PROCESS IMAGE BASED ENTITIES
+            newEntities = {}
+            #-------------------------------------------------------------------------------------------------------    
+            # PROCESS IMAGE INFORMATION IF REQUIRED
+            #-------------------------------------------------------------------------------------------------------
+            
             if source == "image":
-                # STANDARDISE IMAGE OBJECTS (NOTE THAT THIS STILL NEEDS TO BE IMPLEMENTED BELOW)
-                imObjects = {}
-                for obj_id, (centreX, centreY), label, confidence, bbox in newObjects:
-                    imObjects[obj_id] = [(centreX, centreY),objTOI,f"{source}: {label}","unk",[]]
 
-                # COMPARE TO TRACKED OBJECTS
-                for trackedObjId, imEntity in trackedObjects.items():
-                    prevX, prevY = imEntity[0]  # position of current tracked entity 
-
-                    # IMAGE OBJECT RESOLUTION
-                    for obj_id, (centreX, centreY), label, confidence, bbox in newObjects: # iterate over known list of entities
-                        objDist = ((centreX - prevX) ** 2 + (centreY - prevY) ** 2) ** 0.5
-                        if objDist < spatialThreshold and confidence > confidenceThreshold:
-                            # if the new source is an image, overwrite the old object loc, otherwise leave it alone
-                            trackedObjects[trackedObjId][0] = (centreX, centreY) #(x,y)                  
-                            trackedObjects[trackedObjId][1] = objTOI #TOI
-                            trackedObjects[trackedObjId][2] += f"{source}: {label}" #description,identification(friend, enemy, unk), [file_loc]]
-                            newObjects.remove((obj_id, (centreX, centreY), label, confidence, bbox)) # remove item from list if resolved
-
-                # ADD NEW IMAGE OBJECTS
-                for obj_id, (centreX, centreY), label, confidence, bbox in newObjects:
-                    if confidence > confidenceThreshold:
-                        trackedObjects[f"i{objCount}"] = [(centreX, centreY),objTOI,label,None,[None]]
-                        objCount += 1                              
-                #-------------------------------------------------------------------------------------------------------
-                # WEBCAM PLOT
-                #-------------------------------------------------------------------------------------------------------
-
-                # Draw bounding boxes, labels, and IDs
-                for obj_id, center, label, confidence, bbox in plotObjects:
+                # WEBCAM PLOT AND ENTITY STANDARDISATION               
+                for obj_id, centre, label, confidence, bbox in newObjects:
+                    newEntities[obj_id] = [centre,objTOI,f"{source}: {label}","unk",confidence] # standardises image entites for later use
                     x1, y1, x2, y2 = bbox
                     cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)  # Bounding box
-                    cv2.putText(frame, f'{label} {confidence:.2f} ID: {obj_id}', (x1, y1 - 10),
+                    cv2.putText(frame, f'{label} {confidence:.2f} loc: {centre}', (x1, y1 - 10),
                                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
-
                 # Show webcam feed
                 cv2.imshow("Webcam Object Tracking", frame)
-                
-            # PROCESS CHAT BASED ENTITIES
+
+                    
+            #-------------------------------------------------------------------------------------------------------    
+            # PROCESS CHAT INFORMATION IF REQUIRED
+            #-------------------------------------------------------------------------------------------------------
             if source == "chat":
                 #chat work goes here
                 pass
-            #-------------------------------------------------------------------------------------------------------
-            # AGE OFF TRACKED OBJECTS
-            #-------------------------------------------------------------------------------------------------------
-            current_time = datetime.now()
-            """
-            Known issue with difference between currObjTime and current_time being ~20 different despite being called at same time 
-            for objKey in trackedObjects.keys():
-                currObjTime = trackedObjects[objKey][1]
-                print("---------------------------------")
-                print(currObjTime)
-                print(current_time)
-                print((current_time - currObjTime).total_seconds())
-            """
-            agedTrackedObjects = {key: ent for key, ent in trackedObjects.items() if (current_time - ent[1]).total_seconds() <= ageOff}
 
             #-------------------------------------------------------------------------------------------------------
-            # ACTUAL PLOT
+            # RESOLVE ENTITIES
+            #-------------------------------------------------------------------------------------------------------
+            # COMPARE NEW ENTITIES TO TRACKED ENTITIES
+            for trackedObjId, imEntity in trackedEntities.items():
+                prevX, prevY = imEntity[0]  # position of current tracked entity 
+
+                # check existing objects
+                delIDList = []
+                for obj_id, [xy,TOI,entLabel,fofID,conf] in newEntities.items(): # iterate over known list of entities
+                    objDist = ((xy[0] - prevX) ** 2 + (xy[1] - prevY) ** 2) ** 0.5
+                    if conf > confidenceThreshold and objDist < spatialThreshold:
+                        # if the new source is an image, overwrite the old object loc, otherwise leave it alone
+                        trackedEntities[trackedObjId][:2] = [xy,TOI]
+                        newDesc = f"{source}: {entLabel}"
+                        if trackedEntities[trackedObjId][2][:-len(newDesc)] != newDesc: # if the last description added is the same as the new one, do not add a new description
+                            trackedEntities[trackedObjId][2] = f"{source}: {entLabel}"
+                        trackedEntities[trackedObjId][3:] = fofID, conf
+                        delIDList.append(obj_id)
+                for ii in delIDList:
+                    del newEntities[ii]
+            
+            # add new objects
+            for obj_id, newEnt in newEntities.items():
+                conf = newEnt[-1]
+                if conf > confidenceThreshold:
+                    trackedEntities[f"{obj_id}_{objCount}"] = newEnt
+                    objCount += 1                              
+
+            # AGE OFF TRACKED OBJECTS
+            current_time = datetime.now()
+            agedtrackedEntities = {key: ent for key, ent in trackedEntities.items() if (current_time - ent[1]).total_seconds() <= ageOff}
+            [print(f"{key}: {ii}") for key, ii in agedtrackedEntities.items()]
+            #-------------------------------------------------------------------------------------------------------
+            # PLOT ENTITIES
             #-------------------------------------------------------------------------------------------------------
             # Update scatter plot with new points. Note it will error out if there are no objects detected without if statement
             import matplotlib.image as mpimg
+                        
             enIcon = mpimg.imread("./icons/en.png")
             unkIcon = mpimg.imread("./icons/unk.png")
 
@@ -154,7 +153,7 @@ def resolutionFunction(queue):
                 artist.remove()
                 
             # go through each object and plot
-            for ent in agedTrackedObjects.values():
+            for ent in agedtrackedEntities.values():
 
                 # apply correct mil symbol (only enemy and unknown available)
                 if ent[3] == "en":
@@ -182,7 +181,7 @@ def resolutionFunction(queue):
                 scatterText = ax.text(ent[0][0] + text_offset_x, ent[0][1] + text_offset_y, annotationText, fontsize=12, color='black')
 
                 # add text to plot
-                tracked_object_count = len(agedTrackedObjects)
+                tracked_object_count = len(agedtrackedEntities)
                 plotText = ax.text(0.5, 0.9, f'No. of Tracked Objects: {tracked_object_count}', transform=ax.transAxes,
                 fontsize=12, verticalalignment='top', horizontalalignment='center')
 
