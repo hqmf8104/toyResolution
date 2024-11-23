@@ -47,9 +47,16 @@ def resolutionFunction(queue, gXY):
                     cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)  # Bounding box
                     cv2.putText(frame, f'{label} {confidence:.2f} loc: {centre}', (x1, y1 - 10),
                                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+                
                 # Show webcam feed
-                cv2.imshow("Webcam Object Tracking", frame)
+                windowName = "Object Tracking - Camera 1" 
+                cv2.namedWindow(windowName, cv2.WINDOW_NORMAL)
+                cv2.resizeWindow(windowName, 600, 523)                              
+                cv2.moveWindow(windowName, 645, 0)
+                cv2.imshow(windowName, frame)
+                # Move the window to the top-left corner of the screen
 
+                
                     
             #-------------------------------------------------------------------------------------------------------    
             # PROCESS CHAT INFORMATION IF REQUIRED

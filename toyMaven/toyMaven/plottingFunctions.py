@@ -11,6 +11,14 @@ def initialize_plot(groundX, groundY):
     ax.set_xlim(0, groundX)  # Set x-axis limits
     ax.set_ylim(0, groundY)  # Set y-axis limits
     ax.invert_yaxis()
+
+    # position window in top left
+    # Retrieve the current figure manager
+    manager = plt.get_current_fig_manager()
+
+    # Set the window position to top-left corner (0, 0)
+    manager.window.wm_geometry("+0+0")
+
     return fig, ax
 
 def get_image(identifier, image_map, default_image_path, zoom=0.05):
