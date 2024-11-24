@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 from matplotlib.offsetbox import OffsetImage, AnnotationBbox
+import matplotlib.image as mpimg
 import numpy as np
 
 
@@ -7,11 +8,22 @@ def initialize_plot(groundX, groundY):
     """
     Initialize the figure and axis for plotting.
     """
+    # Load the background image
+    backgroundImage = mpimg.imread('./icons/mapping.jpg') 
+
     fig, ax = plt.subplots()
     ax.set_xlim(0, groundX)  # Set x-axis limits
     ax.set_ylim(0, groundY)  # Set y-axis limits
     ax.invert_yaxis()
-    ax.grid(True)
+    # Display the background image
+    
+    # do one or the other
+    # SHOW MAP, DON'T SHOW TICK MARKS OR GRID
+    ax.imshow(backgroundImage, extent=[0, groundX, 0, groundY], aspect='auto')
+    ax.tick_params(axis='both', which='both', length=0)
+    
+    # SHOW GRID
+    #ax.grid(True)
 
     # position window in top left
     # Retrieve the current figure manager
