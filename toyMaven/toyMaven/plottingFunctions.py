@@ -8,8 +8,7 @@ def initialize_plot(groundX, groundY):
     """
     Initialize the figure and axis for plotting.
     """
-    # Load the background image
-    backgroundImage = mpimg.imread('./icons/mapping.jpg') 
+  
 
     fig, ax = plt.subplots()
     ax.set_xlim(0, groundX)  # Set x-axis limits
@@ -19,6 +18,7 @@ def initialize_plot(groundX, groundY):
     
     # do one or the other
     # SHOW MAP, DON'T SHOW TICK MARKS OR GRID
+    backgroundImage = mpimg.imread('./icons/mapping.jpg') 
     ax.imshow(backgroundImage, extent=[0, groundX, 0, groundY], aspect='auto')
     ax.tick_params(axis='both', which='both', length=0)
     
