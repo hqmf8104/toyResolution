@@ -56,8 +56,6 @@ def resolutionFunction(queue, gXY):
                 cv2.imshow(windowName, frame)
                 # Move the window to the top-left corner of the screen
 
-                
-                    
             #-------------------------------------------------------------------------------------------------------    
             # PROCESS CHAT INFORMATION IF REQUIRED
             #-------------------------------------------------------------------------------------------------------

@@ -11,6 +11,7 @@ def initialize_plot(groundX, groundY):
     ax.set_xlim(0, groundX)  # Set x-axis limits
     ax.set_ylim(0, groundY)  # Set y-axis limits
     ax.invert_yaxis()
+    ax.grid(True)
 
     # position window in top left
     # Retrieve the current figure manager
