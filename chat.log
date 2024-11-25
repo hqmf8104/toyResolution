@@ -832,3 +832,153 @@
 2024-11-23 15:25:55,164 - DEBUG - close.complete
 2024-11-23 15:25:55,164 - DEBUG - close.started
 2024-11-23 15:25:55,164 - DEBUG - close.complete
+2024-11-24 10:08:18,160 - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2024-11-24 10:08:18,164 - DEBUG - load_verify_locations cafile='C:\\Users\\patm2\\Development\\toyEnv\\lib\\site-packages\\certifi\\cacert.pem'
+2024-11-24 10:08:18,179 - DEBUG - Request options: {'method': 'post', 'url': '/chat/completions', 'files': None, 'json_data': {'messages': [{'role': 'system', 'content': "\n                        You return any message describing an entity as a text description (str), a location (str) and whether they are friendly, enemy or destroyed (fr, en or dest).\n                        If you don't know whether they are friend or enemy, assume friend.\n                        If the location refers to something green, you return (50,50) as the location.\n                        If a locaton is given as (x,y), you return this value.\n                        ivo means near.\n                        Please return as a JSON of format {description: str, loc: str,id: en, fr or dest} and wrap it in a code block.\n                        "}, {'role': 'user', 'content': 'Test'}], 'model': 'gpt-4o', 'temperature': 0}}
+2024-11-24 10:08:18,189 - DEBUG - Sending HTTP Request: POST https://api.openai.com/v1/chat/completions
+2024-11-24 10:08:18,189 - DEBUG - connect_tcp.started host='api.openai.com' port=443 local_address=None timeout=5.0 socket_options=None
+2024-11-24 10:08:18,311 - DEBUG - connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x0000016472009FF0>
+2024-11-24 10:08:18,311 - DEBUG - start_tls.started ssl_context=<ssl.SSLContext object at 0x0000016471F455C0> server_hostname='api.openai.com' timeout=5.0
+2024-11-24 10:08:18,396 - DEBUG - start_tls.complete return_value=<httpcore._backends.sync.SyncStream object at 0x0000016472009FC0>
+2024-11-24 10:08:18,396 - DEBUG - send_request_headers.started request=<Request [b'POST']>
+2024-11-24 10:08:18,396 - DEBUG - send_request_headers.complete
+2024-11-24 10:08:18,396 - DEBUG - send_request_body.started request=<Request [b'POST']>
+2024-11-24 10:08:18,396 - DEBUG - send_request_body.complete
+2024-11-24 10:08:18,396 - DEBUG - receive_response_headers.started request=<Request [b'POST']>
+2024-11-24 10:08:19,513 - DEBUG - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 24 Nov 2024 10:08:15 GMT'), (b'Content-Type', b'application/json'), (b'Transfer-Encoding', b'chunked'), (b'Connection', b'keep-alive'), (b'access-control-expose-headers', b'X-Request-ID'), (b'openai-organization', b'user-ptdyzbbwnftidyckpdsgc4af'), (b'openai-processing-ms', b'597'), (b'openai-version', b'2020-10-01'), (b'x-ratelimit-limit-requests', b'5000'), (b'x-ratelimit-limit-tokens', b'800000'), (b'x-ratelimit-remaining-requests', b'4999'), (b'x-ratelimit-remaining-tokens', b'799817'), (b'x-ratelimit-reset-requests', b'12ms'), (b'x-ratelimit-reset-tokens', b'13ms'), (b'x-request-id', b'req_1d0e1839a1e4a303a81b0b723537a76e'), (b'strict-transport-security', b'max-age=31536000; includeSubDomains; preload'), (b'CF-Cache-Status', b'DYNAMIC'), (b'Set-Cookie', b'__cf_bm=Wyfw1MQMDt9tHdcUdutYNAgTCgzvGb4t7ftOMQj57UQ-1732442895-1.0.1.1-0g0wz.Oy3qc.qadaA4SaeBsrKm6e6SZyyRjJaROi_HcXq0sOgOt5dfF3xj1RyHYN1Et46djyZDSzxHyokSWsug; path=/; expires=Sun, 24-Nov-24 10:38:15 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), (b'X-Content-Type-Options', b'nosniff'), (b'Set-Cookie', b'_cfuvid=SNhbVTWzkyi2UcI6N5FBtaGVEVJex7EdhtnmmtFCqS8-1732442895932-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), (b'Server', b'cloudflare'), (b'CF-RAY', b'8e7898bcde4479bf-LHR'), (b'Content-Encoding', b'gzip'), (b'alt-svc', b'h3=":443"; ma=86400')])
+2024-11-24 10:08:19,515 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2024-11-24 10:08:19,515 - DEBUG - receive_response_body.started request=<Request [b'POST']>
+2024-11-24 10:08:19,515 - DEBUG - receive_response_body.complete
+2024-11-24 10:08:19,515 - DEBUG - response_closed.started
+2024-11-24 10:08:19,515 - DEBUG - response_closed.complete
+2024-11-24 10:08:19,515 - DEBUG - HTTP Response: POST https://api.openai.com/v1/chat/completions "200 OK" Headers([('date', 'Sun, 24 Nov 2024 10:08:15 GMT'), ('content-type', 'application/json'), ('transfer-encoding', 'chunked'), ('connection', 'keep-alive'), ('access-control-expose-headers', 'X-Request-ID'), ('openai-organization', 'user-ptdyzbbwnftidyckpdsgc4af'), ('openai-processing-ms', '597'), ('openai-version', '2020-10-01'), ('x-ratelimit-limit-requests', '5000'), ('x-ratelimit-limit-tokens', '800000'), ('x-ratelimit-remaining-requests', '4999'), ('x-ratelimit-remaining-tokens', '799817'), ('x-ratelimit-reset-requests', '12ms'), ('x-ratelimit-reset-tokens', '13ms'), ('x-request-id', 'req_1d0e1839a1e4a303a81b0b723537a76e'), ('strict-transport-security', 'max-age=31536000; includeSubDomains; preload'), ('cf-cache-status', 'DYNAMIC'), ('set-cookie', '__cf_bm=Wyfw1MQMDt9tHdcUdutYNAgTCgzvGb4t7ftOMQj57UQ-1732442895-1.0.1.1-0g0wz.Oy3qc.qadaA4SaeBsrKm6e6SZyyRjJaROi_HcXq0sOgOt5dfF3xj1RyHYN1Et46djyZDSzxHyokSWsug; path=/; expires=Sun, 24-Nov-24 10:38:15 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), ('x-content-type-options', 'nosniff'), ('set-cookie', '_cfuvid=SNhbVTWzkyi2UcI6N5FBtaGVEVJex7EdhtnmmtFCqS8-1732442895932-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), ('server', 'cloudflare'), ('cf-ray', '8e7898bcde4479bf-LHR'), ('content-encoding', 'gzip'), ('alt-svc', 'h3=":443"; ma=86400')])
+2024-11-24 10:08:19,515 - DEBUG - request_id: req_1d0e1839a1e4a303a81b0b723537a76e
+2024-11-24 10:08:19,515 - INFO - ```
+{
+  "description": "Test",
+  "loc": "(50,50)",
+  "id": "fr"
+}
+```
+2024-11-24 10:10:42,257 - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2024-11-24 10:10:42,258 - DEBUG - load_verify_locations cafile='C:\\Users\\patm2\\Development\\toyEnv\\lib\\site-packages\\certifi\\cacert.pem'
+2024-11-24 10:10:42,283 - DEBUG - Request options: {'method': 'post', 'url': '/chat/completions', 'files': None, 'json_data': {'messages': [{'role': 'system', 'content': "\n                        You return any message describing an entity as a text description (str), a location (str) and whether they are friendly, enemy or destroyed (fr, en or dest).\n                        If you don't know whether they are friend or enemy, assume friend.\n                        If the location refers to something green, you return (50,50) as the location.\n                        If a locaton is given as (x,y), you return this value.\n                        ivo means near.\n                        Please return as a JSON of format {description: str, loc: str,id: en, fr or dest} and wrap it in a code block.\n                        "}, {'role': 'user', 'content': 'enemy sighted at ivo 190 380'}], 'model': 'gpt-4o', 'temperature': 0}}
+2024-11-24 10:10:42,284 - DEBUG - Sending HTTP Request: POST https://api.openai.com/v1/chat/completions
+2024-11-24 10:10:42,285 - DEBUG - connect_tcp.started host='api.openai.com' port=443 local_address=None timeout=5.0 socket_options=None
+2024-11-24 10:10:42,368 - DEBUG - connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x000001647205A860>
+2024-11-24 10:10:42,369 - DEBUG - start_tls.started ssl_context=<ssl.SSLContext object at 0x0000016471F46B40> server_hostname='api.openai.com' timeout=5.0
+2024-11-24 10:10:42,501 - DEBUG - start_tls.complete return_value=<httpcore._backends.sync.SyncStream object at 0x000001647205A830>
+2024-11-24 10:10:42,501 - DEBUG - send_request_headers.started request=<Request [b'POST']>
+2024-11-24 10:10:42,501 - DEBUG - send_request_headers.complete
+2024-11-24 10:10:42,502 - DEBUG - send_request_body.started request=<Request [b'POST']>
+2024-11-24 10:10:42,502 - DEBUG - send_request_body.complete
+2024-11-24 10:10:42,502 - DEBUG - receive_response_headers.started request=<Request [b'POST']>
+2024-11-24 10:10:44,211 - DEBUG - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 24 Nov 2024 10:10:40 GMT'), (b'Content-Type', b'application/json'), (b'Transfer-Encoding', b'chunked'), (b'Connection', b'keep-alive'), (b'access-control-expose-headers', b'X-Request-ID'), (b'openai-organization', b'user-ptdyzbbwnftidyckpdsgc4af'), (b'openai-processing-ms', b'1440'), (b'openai-version', b'2020-10-01'), (b'x-ratelimit-limit-requests', b'5000'), (b'x-ratelimit-limit-tokens', b'800000'), (b'x-ratelimit-remaining-requests', b'4999'), (b'x-ratelimit-remaining-tokens', b'799810'), (b'x-ratelimit-reset-requests', b'12ms'), (b'x-ratelimit-reset-tokens', b'14ms'), (b'x-request-id', b'req_c1c2a1ad555cc7bbb06e0a4497b59778'), (b'strict-transport-security', b'max-age=31536000; includeSubDomains; preload'), (b'CF-Cache-Status', b'DYNAMIC'), (b'Set-Cookie', b'__cf_bm=v73meOtqT7L0Og7uU1D49fF5EpeAjoBJ7bNiTwesRBc-1732443040-1.0.1.1-kPFBnTB11vG0hemhmSXMWuQJT2d.yST5Rx2AJoBk6HY9ZY0529SU96WuCeRDSgvk0X6nzIssY2z.DIsyl5voow; path=/; expires=Sun, 24-Nov-24 10:40:40 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), (b'X-Content-Type-Options', b'nosniff'), (b'Set-Cookie', b'_cfuvid=mZDRT6S7nznVKzQ5run4b12V3_7RLM1rMMVCPwCKmag-1732443040552-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), (b'Server', b'cloudflare'), (b'CF-RAY', b'8e789c417fe8bd9f-LHR'), (b'Content-Encoding', b'gzip'), (b'alt-svc', b'h3=":443"; ma=86400')])
+2024-11-24 10:10:44,212 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2024-11-24 10:10:44,212 - DEBUG - receive_response_body.started request=<Request [b'POST']>
+2024-11-24 10:10:44,213 - DEBUG - receive_response_body.complete
+2024-11-24 10:10:44,213 - DEBUG - response_closed.started
+2024-11-24 10:10:44,213 - DEBUG - response_closed.complete
+2024-11-24 10:10:44,214 - DEBUG - HTTP Response: POST https://api.openai.com/v1/chat/completions "200 OK" Headers([('date', 'Sun, 24 Nov 2024 10:10:40 GMT'), ('content-type', 'application/json'), ('transfer-encoding', 'chunked'), ('connection', 'keep-alive'), ('access-control-expose-headers', 'X-Request-ID'), ('openai-organization', 'user-ptdyzbbwnftidyckpdsgc4af'), ('openai-processing-ms', '1440'), ('openai-version', '2020-10-01'), ('x-ratelimit-limit-requests', '5000'), ('x-ratelimit-limit-tokens', '800000'), ('x-ratelimit-remaining-requests', '4999'), ('x-ratelimit-remaining-tokens', '799810'), ('x-ratelimit-reset-requests', '12ms'), ('x-ratelimit-reset-tokens', '14ms'), ('x-request-id', 'req_c1c2a1ad555cc7bbb06e0a4497b59778'), ('strict-transport-security', 'max-age=31536000; includeSubDomains; preload'), ('cf-cache-status', 'DYNAMIC'), ('set-cookie', '__cf_bm=v73meOtqT7L0Og7uU1D49fF5EpeAjoBJ7bNiTwesRBc-1732443040-1.0.1.1-kPFBnTB11vG0hemhmSXMWuQJT2d.yST5Rx2AJoBk6HY9ZY0529SU96WuCeRDSgvk0X6nzIssY2z.DIsyl5voow; path=/; expires=Sun, 24-Nov-24 10:40:40 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), ('x-content-type-options', 'nosniff'), ('set-cookie', '_cfuvid=mZDRT6S7nznVKzQ5run4b12V3_7RLM1rMMVCPwCKmag-1732443040552-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), ('server', 'cloudflare'), ('cf-ray', '8e789c417fe8bd9f-LHR'), ('content-encoding', 'gzip'), ('alt-svc', 'h3=":443"; ma=86400')])
+2024-11-24 10:10:44,214 - DEBUG - request_id: req_c1c2a1ad555cc7bbb06e0a4497b59778
+2024-11-24 10:10:44,215 - INFO - ```json
+{
+  "description": "enemy sighted",
+  "loc": "ivo 190 380",
+  "id": "en"
+}
+```
+2024-11-24 10:11:25,140 - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2024-11-24 10:11:25,140 - DEBUG - load_verify_locations cafile='C:\\Users\\patm2\\Development\\toyEnv\\lib\\site-packages\\certifi\\cacert.pem'
+2024-11-24 10:11:25,164 - DEBUG - Request options: {'method': 'post', 'url': '/chat/completions', 'files': None, 'json_data': {'messages': [{'role': 'system', 'content': "\n                        You return any message describing an entity as a text description (str), a location (str) and whether they are friendly, enemy or destroyed (fr, en or dest).\n                        If you don't know whether they are friend or enemy, assume friend.\n                        If the location refers to something green, you return (50,50) as the location.\n                        If a locaton is given as (x,y), you return this value.\n                        ivo means near.\n                        Please return as a JSON of format {description: str, loc: str,id: en, fr or dest} and wrap it in a code block.\n                        "}, {'role': 'user', 'content': 'Enemy ivo 270 300 destroyed'}], 'model': 'gpt-4o', 'temperature': 0}}
+2024-11-24 10:11:25,165 - DEBUG - Sending HTTP Request: POST https://api.openai.com/v1/chat/completions
+2024-11-24 10:11:25,165 - DEBUG - connect_tcp.started host='api.openai.com' port=443 local_address=None timeout=5.0 socket_options=None
+2024-11-24 10:11:25,245 - DEBUG - connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x0000016472069120>
+2024-11-24 10:11:25,245 - DEBUG - start_tls.started ssl_context=<ssl.SSLContext object at 0x0000016471F46840> server_hostname='api.openai.com' timeout=5.0
+2024-11-24 10:11:25,310 - DEBUG - start_tls.complete return_value=<httpcore._backends.sync.SyncStream object at 0x00000164720690F0>
+2024-11-24 10:11:25,310 - DEBUG - send_request_headers.started request=<Request [b'POST']>
+2024-11-24 10:11:25,310 - DEBUG - send_request_headers.complete
+2024-11-24 10:11:25,310 - DEBUG - send_request_body.started request=<Request [b'POST']>
+2024-11-24 10:11:25,310 - DEBUG - send_request_body.complete
+2024-11-24 10:11:25,310 - DEBUG - receive_response_headers.started request=<Request [b'POST']>
+2024-11-24 10:11:26,194 - DEBUG - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 24 Nov 2024 10:11:22 GMT'), (b'Content-Type', b'application/json'), (b'Transfer-Encoding', b'chunked'), (b'Connection', b'keep-alive'), (b'access-control-expose-headers', b'X-Request-ID'), (b'openai-organization', b'user-ptdyzbbwnftidyckpdsgc4af'), (b'openai-processing-ms', b'554'), (b'openai-version', b'2020-10-01'), (b'x-ratelimit-limit-requests', b'5000'), (b'x-ratelimit-limit-tokens', b'800000'), (b'x-ratelimit-remaining-requests', b'4999'), (b'x-ratelimit-remaining-tokens', b'799810'), (b'x-ratelimit-reset-requests', b'12ms'), (b'x-ratelimit-reset-tokens', b'14ms'), (b'x-request-id', b'req_86922d22dc3a8b9a878160878a547320'), (b'strict-transport-security', b'max-age=31536000; includeSubDomains; preload'), (b'CF-Cache-Status', b'DYNAMIC'), (b'Set-Cookie', b'__cf_bm=.iYL5gqrr23vobEB1XHd4yHiPEtepRiXM_oIAsgAGbQ-1732443082-1.0.1.1-qW64Lj.R73mM09tQzVeBort7LGF4xZniSmwR1ElWE1L7BkTdM2eCpCi8l4AOv6pNk7UhH5MNire2ZzMwj3asmg; path=/; expires=Sun, 24-Nov-24 10:41:22 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), (b'X-Content-Type-Options', b'nosniff'), (b'Set-Cookie', b'_cfuvid=q01hpk_AEMt3YUF3qZICctd6UmxQzAP0PXISkSloJiA-1732443082473-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), (b'Server', b'cloudflare'), (b'CF-RAY', b'8e789d4d2b18cd21-LHR'), (b'Content-Encoding', b'gzip'), (b'alt-svc', b'h3=":443"; ma=86400')])
+2024-11-24 10:11:26,195 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2024-11-24 10:11:26,195 - DEBUG - receive_response_body.started request=<Request [b'POST']>
+2024-11-24 10:11:26,196 - DEBUG - receive_response_body.complete
+2024-11-24 10:11:26,196 - DEBUG - response_closed.started
+2024-11-24 10:11:26,196 - DEBUG - response_closed.complete
+2024-11-24 10:11:26,196 - DEBUG - HTTP Response: POST https://api.openai.com/v1/chat/completions "200 OK" Headers([('date', 'Sun, 24 Nov 2024 10:11:22 GMT'), ('content-type', 'application/json'), ('transfer-encoding', 'chunked'), ('connection', 'keep-alive'), ('access-control-expose-headers', 'X-Request-ID'), ('openai-organization', 'user-ptdyzbbwnftidyckpdsgc4af'), ('openai-processing-ms', '554'), ('openai-version', '2020-10-01'), ('x-ratelimit-limit-requests', '5000'), ('x-ratelimit-limit-tokens', '800000'), ('x-ratelimit-remaining-requests', '4999'), ('x-ratelimit-remaining-tokens', '799810'), ('x-ratelimit-reset-requests', '12ms'), ('x-ratelimit-reset-tokens', '14ms'), ('x-request-id', 'req_86922d22dc3a8b9a878160878a547320'), ('strict-transport-security', 'max-age=31536000; includeSubDomains; preload'), ('cf-cache-status', 'DYNAMIC'), ('set-cookie', '__cf_bm=.iYL5gqrr23vobEB1XHd4yHiPEtepRiXM_oIAsgAGbQ-1732443082-1.0.1.1-qW64Lj.R73mM09tQzVeBort7LGF4xZniSmwR1ElWE1L7BkTdM2eCpCi8l4AOv6pNk7UhH5MNire2ZzMwj3asmg; path=/; expires=Sun, 24-Nov-24 10:41:22 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), ('x-content-type-options', 'nosniff'), ('set-cookie', '_cfuvid=q01hpk_AEMt3YUF3qZICctd6UmxQzAP0PXISkSloJiA-1732443082473-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), ('server', 'cloudflare'), ('cf-ray', '8e789d4d2b18cd21-LHR'), ('content-encoding', 'gzip'), ('alt-svc', 'h3=":443"; ma=86400')])
+2024-11-24 10:11:26,196 - DEBUG - request_id: req_86922d22dc3a8b9a878160878a547320
+2024-11-24 10:11:26,197 - INFO - ```json
+{
+  "description": "Enemy destroyed",
+  "loc": "(270,300)",
+  "id": "dest"
+}
+```
+2024-11-24 10:12:15,699 - DEBUG - close.started
+2024-11-24 10:12:15,699 - DEBUG - close.complete
+2024-11-24 10:12:15,700 - DEBUG - close.started
+2024-11-24 10:12:15,700 - DEBUG - close.complete
+2024-11-24 10:12:15,700 - DEBUG - close.started
+2024-11-24 10:12:15,701 - DEBUG - close.complete
+2024-11-25 13:08:34,989 - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2024-11-25 13:08:34,990 - DEBUG - load_verify_locations cafile='C:\\Users\\patm2\\Development\\toyEnv\\lib\\site-packages\\certifi\\cacert.pem'
+2024-11-25 13:08:35,035 - DEBUG - Request options: {'method': 'post', 'url': '/chat/completions', 'files': None, 'json_data': {'messages': [{'role': 'system', 'content': "\n                        You return any message describing an entity as a text description (str), a location (str) and whether they are friendly, enemy or destroyed (fr, en or dest).\n                        If you don't know whether they are friend or enemy, assume friend.\n                        If the location refers to something green, you return (50,50) as the location.\n                        If a locaton is given as (x,y), you return this value.\n                        ivo means near.\n                        Please return as a JSON of format {description: str, loc: str,id: en, fr or dest} and wrap it in a code block.\n                        "}, {'role': 'user', 'content': 'enemy vehicle ivo 300 450'}], 'model': 'gpt-4o', 'temperature': 0}}
+2024-11-25 13:08:35,075 - DEBUG - Sending HTTP Request: POST https://api.openai.com/v1/chat/completions
+2024-11-25 13:08:35,075 - DEBUG - connect_tcp.started host='api.openai.com' port=443 local_address=None timeout=5.0 socket_options=None
+2024-11-25 13:08:35,268 - DEBUG - connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x000001B47BB11FF0>
+2024-11-25 13:08:35,269 - DEBUG - start_tls.started ssl_context=<ssl.SSLContext object at 0x000001B47BA41B40> server_hostname='api.openai.com' timeout=5.0
+2024-11-25 13:08:35,353 - DEBUG - start_tls.complete return_value=<httpcore._backends.sync.SyncStream object at 0x000001B47BB11FC0>
+2024-11-25 13:08:35,354 - DEBUG - send_request_headers.started request=<Request [b'POST']>
+2024-11-25 13:08:35,355 - DEBUG - send_request_headers.complete
+2024-11-25 13:08:35,355 - DEBUG - send_request_body.started request=<Request [b'POST']>
+2024-11-25 13:08:35,355 - DEBUG - send_request_body.complete
+2024-11-25 13:08:35,355 - DEBUG - receive_response_headers.started request=<Request [b'POST']>
+2024-11-25 13:08:36,396 - DEBUG - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Mon, 25 Nov 2024 13:08:36 GMT'), (b'Content-Type', b'application/json'), (b'Transfer-Encoding', b'chunked'), (b'Connection', b'keep-alive'), (b'access-control-expose-headers', b'X-Request-ID'), (b'openai-organization', b'user-ptdyzbbwnftidyckpdsgc4af'), (b'openai-processing-ms', b'490'), (b'openai-version', b'2020-10-01'), (b'x-ratelimit-limit-requests', b'5000'), (b'x-ratelimit-limit-tokens', b'800000'), (b'x-ratelimit-remaining-requests', b'4999'), (b'x-ratelimit-remaining-tokens', b'799812'), (b'x-ratelimit-reset-requests', b'12ms'), (b'x-ratelimit-reset-tokens', b'14ms'), (b'x-request-id', b'req_5e4ed8e76bd959c1fd619291750b310e'), (b'strict-transport-security', b'max-age=31536000; includeSubDomains; preload'), (b'CF-Cache-Status', b'DYNAMIC'), (b'Set-Cookie', b'__cf_bm=dW1TNhYLWwD0KyBotfWhSMATSVz4I6QzVXmgoowZ2qs-1732540116-1.0.1.1-_Le5Ce23B0tSvzJYs2asbs4edETDfkD7IiGCHaB2G86R7fNDEip0Zw8NSNaVbfY68HfLS7BwSk4Ov8s0LVtyQw; path=/; expires=Mon, 25-Nov-24 13:38:36 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), (b'X-Content-Type-Options', b'nosniff'), (b'Set-Cookie', b'_cfuvid=SXbMsDCDUFucrQog_Z4b9WDuCS3_OlA8OYaFe3JoAz0-1732540116381-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), (b'Server', b'cloudflare'), (b'CF-RAY', b'8e81de4939e860f0-LHR'), (b'Content-Encoding', b'gzip'), (b'alt-svc', b'h3=":443"; ma=86400')])
+2024-11-25 13:08:36,398 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2024-11-25 13:08:36,399 - DEBUG - receive_response_body.started request=<Request [b'POST']>
+2024-11-25 13:08:36,399 - DEBUG - receive_response_body.complete
+2024-11-25 13:08:36,399 - DEBUG - response_closed.started
+2024-11-25 13:08:36,400 - DEBUG - response_closed.complete
+2024-11-25 13:08:36,400 - DEBUG - HTTP Response: POST https://api.openai.com/v1/chat/completions "200 OK" Headers([('date', 'Mon, 25 Nov 2024 13:08:36 GMT'), ('content-type', 'application/json'), ('transfer-encoding', 'chunked'), ('connection', 'keep-alive'), ('access-control-expose-headers', 'X-Request-ID'), ('openai-organization', 'user-ptdyzbbwnftidyckpdsgc4af'), ('openai-processing-ms', '490'), ('openai-version', '2020-10-01'), ('x-ratelimit-limit-requests', '5000'), ('x-ratelimit-limit-tokens', '800000'), ('x-ratelimit-remaining-requests', '4999'), ('x-ratelimit-remaining-tokens', '799812'), ('x-ratelimit-reset-requests', '12ms'), ('x-ratelimit-reset-tokens', '14ms'), ('x-request-id', 'req_5e4ed8e76bd959c1fd619291750b310e'), ('strict-transport-security', 'max-age=31536000; includeSubDomains; preload'), ('cf-cache-status', 'DYNAMIC'), ('set-cookie', '__cf_bm=dW1TNhYLWwD0KyBotfWhSMATSVz4I6QzVXmgoowZ2qs-1732540116-1.0.1.1-_Le5Ce23B0tSvzJYs2asbs4edETDfkD7IiGCHaB2G86R7fNDEip0Zw8NSNaVbfY68HfLS7BwSk4Ov8s0LVtyQw; path=/; expires=Mon, 25-Nov-24 13:38:36 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), ('x-content-type-options', 'nosniff'), ('set-cookie', '_cfuvid=SXbMsDCDUFucrQog_Z4b9WDuCS3_OlA8OYaFe3JoAz0-1732540116381-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), ('server', 'cloudflare'), ('cf-ray', '8e81de4939e860f0-LHR'), ('content-encoding', 'gzip'), ('alt-svc', 'h3=":443"; ma=86400')])
+2024-11-25 13:08:36,400 - DEBUG - request_id: req_5e4ed8e76bd959c1fd619291750b310e
+2024-11-25 13:08:36,407 - INFO - ```json
+{
+  "description": "enemy vehicle",
+  "loc": "(300,450)",
+  "id": "en"
+}
+```
+2024-11-25 13:09:38,977 - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2024-11-25 13:09:38,978 - DEBUG - load_verify_locations cafile='C:\\Users\\patm2\\Development\\toyEnv\\lib\\site-packages\\certifi\\cacert.pem'
+2024-11-25 13:09:39,000 - DEBUG - Request options: {'method': 'post', 'url': '/chat/completions', 'files': None, 'json_data': {'messages': [{'role': 'system', 'content': "\n                        You return any message describing an entity as a text description (str), a location (str) and whether they are friendly, enemy or destroyed (fr, en or dest).\n                        If you don't know whether they are friend or enemy, assume friend.\n                        If the location refers to something green, you return (50,50) as the location.\n                        If a locaton is given as (x,y), you return this value.\n                        ivo means near.\n                        Please return as a JSON of format {description: str, loc: str,id: en, fr or dest} and wrap it in a code block.\n                        "}, {'role': 'user', 'content': 'Enemy ivo 300 450 destroyed'}], 'model': 'gpt-4o', 'temperature': 0}}
+2024-11-25 13:09:39,001 - DEBUG - Sending HTTP Request: POST https://api.openai.com/v1/chat/completions
+2024-11-25 13:09:39,001 - DEBUG - connect_tcp.started host='api.openai.com' port=443 local_address=None timeout=5.0 socket_options=None
+2024-11-25 13:09:39,251 - DEBUG - connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x000001B47BB56B30>
+2024-11-25 13:09:39,251 - DEBUG - start_tls.started ssl_context=<ssl.SSLContext object at 0x000001B47BA42E40> server_hostname='api.openai.com' timeout=5.0
+2024-11-25 13:09:39,324 - DEBUG - start_tls.complete return_value=<httpcore._backends.sync.SyncStream object at 0x000001B47BB56B00>
+2024-11-25 13:09:39,324 - DEBUG - send_request_headers.started request=<Request [b'POST']>
+2024-11-25 13:09:39,325 - DEBUG - send_request_headers.complete
+2024-11-25 13:09:39,325 - DEBUG - send_request_body.started request=<Request [b'POST']>
+2024-11-25 13:09:39,325 - DEBUG - send_request_body.complete
+2024-11-25 13:09:39,325 - DEBUG - receive_response_headers.started request=<Request [b'POST']>
+2024-11-25 13:09:40,312 - DEBUG - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Mon, 25 Nov 2024 13:09:40 GMT'), (b'Content-Type', b'application/json'), (b'Transfer-Encoding', b'chunked'), (b'Connection', b'keep-alive'), (b'access-control-expose-headers', b'X-Request-ID'), (b'openai-organization', b'user-ptdyzbbwnftidyckpdsgc4af'), (b'openai-processing-ms', b'491'), (b'openai-version', b'2020-10-01'), (b'x-ratelimit-limit-requests', b'5000'), (b'x-ratelimit-limit-tokens', b'800000'), (b'x-ratelimit-remaining-requests', b'4999'), (b'x-ratelimit-remaining-tokens', b'799810'), (b'x-ratelimit-reset-requests', b'12ms'), (b'x-ratelimit-reset-tokens', b'14ms'), (b'x-request-id', b'req_aa444619dfee5068e59f1a74900ab76e'), (b'strict-transport-security', b'max-age=31536000; includeSubDomains; preload'), (b'CF-Cache-Status', b'DYNAMIC'), (b'Set-Cookie', b'__cf_bm=vLGrtxkGnRCU62.OiOA5alG9O.B83QXjDwb7np3dKEU-1732540180-1.0.1.1-7Zu_tDzWQ8ygvu3tyeIpa_o6W5kWvC2FnnxuNrU0mqzNnQFhsAOn522UZASkex5.9zLnN9dtKr7tX0Xj3bcZ.w; path=/; expires=Mon, 25-Nov-24 13:39:40 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), (b'X-Content-Type-Options', b'nosniff'), (b'Set-Cookie', b'_cfuvid=UFyiJPapigfGnKYsIK5RBklEO.3PHe8x6bA7gnsEq.w-1732540180007-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), (b'Server', b'cloudflare'), (b'CF-RAY', b'8e81dfd90d82e90e-LHR'), (b'Content-Encoding', b'gzip'), (b'alt-svc', b'h3=":443"; ma=86400')])
+2024-11-25 13:09:40,313 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2024-11-25 13:09:40,313 - DEBUG - receive_response_body.started request=<Request [b'POST']>
+2024-11-25 13:09:40,314 - DEBUG - receive_response_body.complete
+2024-11-25 13:09:40,314 - DEBUG - response_closed.started
+2024-11-25 13:09:40,314 - DEBUG - response_closed.complete
+2024-11-25 13:09:40,314 - DEBUG - HTTP Response: POST https://api.openai.com/v1/chat/completions "200 OK" Headers([('date', 'Mon, 25 Nov 2024 13:09:40 GMT'), ('content-type', 'application/json'), ('transfer-encoding', 'chunked'), ('connection', 'keep-alive'), ('access-control-expose-headers', 'X-Request-ID'), ('openai-organization', 'user-ptdyzbbwnftidyckpdsgc4af'), ('openai-processing-ms', '491'), ('openai-version', '2020-10-01'), ('x-ratelimit-limit-requests', '5000'), ('x-ratelimit-limit-tokens', '800000'), ('x-ratelimit-remaining-requests', '4999'), ('x-ratelimit-remaining-tokens', '799810'), ('x-ratelimit-reset-requests', '12ms'), ('x-ratelimit-reset-tokens', '14ms'), ('x-request-id', 'req_aa444619dfee5068e59f1a74900ab76e'), ('strict-transport-security', 'max-age=31536000; includeSubDomains; preload'), ('cf-cache-status', 'DYNAMIC'), ('set-cookie', '__cf_bm=vLGrtxkGnRCU62.OiOA5alG9O.B83QXjDwb7np3dKEU-1732540180-1.0.1.1-7Zu_tDzWQ8ygvu3tyeIpa_o6W5kWvC2FnnxuNrU0mqzNnQFhsAOn522UZASkex5.9zLnN9dtKr7tX0Xj3bcZ.w; path=/; expires=Mon, 25-Nov-24 13:39:40 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), ('x-content-type-options', 'nosniff'), ('set-cookie', '_cfuvid=UFyiJPapigfGnKYsIK5RBklEO.3PHe8x6bA7gnsEq.w-1732540180007-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), ('server', 'cloudflare'), ('cf-ray', '8e81dfd90d82e90e-LHR'), ('content-encoding', 'gzip'), ('alt-svc', 'h3=":443"; ma=86400')])
+2024-11-25 13:09:40,314 - DEBUG - request_id: req_aa444619dfee5068e59f1a74900ab76e
+2024-11-25 13:09:40,316 - INFO - ```json
+{
+  "description": "Enemy destroyed",
+  "loc": "(300,450)",
+  "id": "dest"
+}
+```
+2024-11-25 13:10:17,697 - DEBUG - close.started
+2024-11-25 13:10:17,698 - DEBUG - close.complete
+2024-11-25 13:10:17,699 - DEBUG - close.started
+2024-11-25 13:10:17,699 - DEBUG - close.complete

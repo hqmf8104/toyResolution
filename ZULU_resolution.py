@@ -52,7 +52,7 @@ def resolutionFunction(queue, gXY):
                 windowName = "Object Tracking - Camera 1" 
                 cv2.namedWindow(windowName, cv2.WINDOW_NORMAL)
                 cv2.resizeWindow(windowName, 600, 523)                              
-                cv2.moveWindow(windowName, 645, 0)
+                #cv2.moveWindow(windowName, 645, 0)
                 cv2.imshow(windowName, frame)
                 # Move the window to the top-left corner of the screen
 

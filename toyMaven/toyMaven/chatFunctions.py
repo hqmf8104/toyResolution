@@ -173,7 +173,7 @@ def chatToEntites(queue):
     systemInstruction = """
                         You return any message describing an entity as a text description (str), a location (str) and whether they are friendly, enemy or destroyed (fr, en or dest).
                         If you don't know whether they are friend or enemy, assume friend.
-                        If the location refers to something green, you return (50,50) as the location.
+                        If the location refers to something green, you return (300,450) as the location.
                         If a locaton is given as (x,y), you return this value.
                         ivo means near.
                         Please return as a JSON of format {description: str, loc: str,id: en, fr or dest} and wrap it in a code block.
