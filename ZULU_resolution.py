@@ -8,8 +8,8 @@ import time
 
 def resolutionFunction(queue, gXY):
     # resolution calibration variables
-    confidenceThreshold = 0.5 #varies between 0 and 1
-    spatialThreshold = 250 # in transformed coordinates
+    confidenceThreshold = 0.87 #varies between 0 and 1
+    spatialThreshold = 200 # in transformed coordinates
     ageOff = 15 # in seconds
 
     # Set up Matplotlib for live plotting
@@ -51,8 +51,8 @@ def resolutionFunction(queue, gXY):
                 # Show webcam feed
                 windowName = "Object Tracking - Camera 1" 
                 cv2.namedWindow(windowName, cv2.WINDOW_NORMAL)
-                cv2.resizeWindow(windowName, 600, 523)                              
-                #cv2.moveWindow(windowName, 645, 0)
+                cv2.resizeWindow(windowName, 800, 608)                              
+                cv2.moveWindow(windowName, 563, 0)
                 cv2.imshow(windowName, frame)
                 # Move the window to the top-left corner of the screen
 
